@@ -2,28 +2,29 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { fetchNoteById } from '@/lib/api';
-import css from './NotesPage.module.css';
+import css from './NoteDetails.module.css';
 import { useParams } from 'next/navigation';
 
 export default function NoteDetails() {
   const { id } = useParams<{ id: string }>();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['note'],
+    queryKey: ['note', id],
     queryFn: () => fetchNoteById(id),
   });
+
+  if (isLoading) return <p>Loading, please wait...</p>;
+  if (error || !data) return <p>Something went wrong.</p>;
+
   return (
     <div className={css.container}>
-      {isLoading && <p>Loading, please wait...</p>}
-      {error && <p>Sorry, 404</p>}
-
       <div className={css.item}>
         <div className={css.header}>
-          <h2>{data?.title}</h2>
+          <h2>{data.title}</h2>
         </div>
-        <p className={css.tag}>{data?.tag}</p>
-        <p className={css.content}>{data?.content}</p>
-        <p className={css.date}>Created date</p>
+        <p className={css.tag}>{data.tag}</p>
+        <p className={css.content}>{data.content}</p>
+        <p className={css.date}>{data.createdAt}</p>
       </div>
     </div>
   );

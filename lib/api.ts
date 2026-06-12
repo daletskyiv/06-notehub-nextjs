@@ -31,6 +31,6 @@ export async function deleteNote(id: string): Promise<Note> {
 }
 
 export async function fetchNoteById(id: string): Promise<Note> {
-  const { data } = await axios.post<Note>(`/notes/${id}`);
+  const { data } = await axios.get<Note>(`/notes/${id}`);
   return data;
 }
